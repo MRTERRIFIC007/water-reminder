@@ -1,0 +1,496 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		039334230488EEABF49EF74E /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B426C93E91B9720F33D004 /* WeeklyChartView.swift */; };
+		0BD068056049514798B223FC /* CormorantGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 676E6140F2424D12BD2588A2 /* CormorantGaramond-Regular.ttf */; };
+		17FF28A76CE042649943F9A4 /* SmartBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBA8B8AE94A58944FC86A /* SmartBreakdownView.swift */; };
+		195ABF16A8C2FD3AA43ACD51 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F178235F78325B77C50C8284 /* StatsView.swift */; };
+		207753A71D7C2973F99E4CA3 /* SealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC0C95FA71A0096600126D /* SealView.swift */; };
+		25656E232CFC34A12F9D6726 /* CormorantGaramond-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8699E8E3723D64AB007C905A /* CormorantGaramond-LightItalic.ttf */; };
+		2C267FCF3FFA00BC8CD4AA18 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4121EC8FDA5BF95366E1C7 /* RootView.swift */; };
+		403EA8C54A51DEE43EA2378B /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7B625A8FB753A8C4A571CA /* HealthData.swift */; };
+		434D9BE4A46B7A71D841B795 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0769FF7A87FED6F338A0EB53 /* WeatherManager.swift */; };
+		54ABDEACFB5D7F7679C8BC6E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56D926EB33E9FFE56E380F6 /* MainView.swift */; };
+		6CFFA1D7038B4080E0B05E94 /* CormorantGaramond-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BA48E04308B9FD5E9859610 /* CormorantGaramond-Light.ttf */; };
+		755E6EF8ED2F6C472D3502DC /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19CCE20A7CFFC45813D6530 /* HealthKitManager.swift */; };
+		8605ADFC3BBBB2B081D4813F /* EnsoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EA255267C61CDE491A13B1 /* EnsoApp.swift */; };
+		895E2A17FB40276DA77F9711 /* ShipporiMincho-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D32A8F6C5C541565F1E1F864 /* ShipporiMincho-Bold.ttf */; };
+		8C928DD3621BFB4120596BF7 /* ShipporiMincho-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B104BF5058DE58B47DD5DFD6 /* ShipporiMincho-Regular.ttf */; };
+		9908B358D5CCBA8D11523B3C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2D420E5576DDF339EBD51F /* NotificationManager.swift */; };
+		9E0220DA248C90F1357A8DD6 /* HydrationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EBAEC99EBAE1DD051926A6B /* HydrationStore.swift */; };
+		A0B6919A653245A0C14F3013 /* ShipporiMincho-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2128ADA257820847A2EC8383 /* ShipporiMincho-Medium.ttf */; };
+		A97B30DB74AC8D01EB39A89E /* ConditionsGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412A664756C1B3ED6B32B1D /* ConditionsGridView.swift */; };
+		B7A7CC20AB68CF189987BBE5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D88DE0F4ABD36CC711DD347 /* SettingsView.swift */; };
+		B9FD09A0E105385CF25F3469 /* InkRippleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79F15D59BB159B0C405C120 /* InkRippleView.swift */; };
+		BAED90030D06717261E7A34D /* SmartGoalEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7FD9A35A9F1F4BB70C4BB4 /* SmartGoalEngine.swift */; };
+		C76DAD28885C1C404A1D2E7B /* EnsoTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F1A671F8ABF4EC47F23948 /* EnsoTheme.swift */; };
+		D15FD61D780777942A9E3514 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0555B93909D603539D99BA81 /* CoreLocation.framework */; };
+		D3AEEA62D0A4F8AC9422022F /* EnsoCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F81A7E6731A3C0B9B86989 /* EnsoCanvasView.swift */; };
+		F1B450582BBAB1D11ADCCEB1 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8164ADD2ADE0EFECC2DA8A /* HealthKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0555B93909D603539D99BA81 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		0769FF7A87FED6F338A0EB53 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		0EBAEC99EBAE1DD051926A6B /* HydrationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationStore.swift; sourceTree = "<group>"; };
+		0F7B625A8FB753A8C4A571CA /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
+		2128ADA257820847A2EC8383 /* ShipporiMincho-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho-Medium.ttf"; sourceTree = "<group>"; };
+		32EA255267C61CDE491A13B1 /* EnsoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnsoApp.swift; sourceTree = "<group>"; };
+		4B8164ADD2ADE0EFECC2DA8A /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		5C88BDD7A976E68377305C6A /* Enso.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Enso.entitlements; sourceTree = "<group>"; };
+		6412A664756C1B3ED6B32B1D /* ConditionsGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsGridView.swift; sourceTree = "<group>"; };
+		676E6140F2424D12BD2588A2 /* CormorantGaramond-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Regular.ttf"; sourceTree = "<group>"; };
+		6C7FD9A35A9F1F4BB70C4BB4 /* SmartGoalEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartGoalEngine.swift; sourceTree = "<group>"; };
+		6D88DE0F4ABD36CC711DD347 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		75EC0C95FA71A0096600126D /* SealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SealView.swift; sourceTree = "<group>"; };
+		848095A48217CC24C7718CB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8699E8E3723D64AB007C905A /* CormorantGaramond-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-LightItalic.ttf"; sourceTree = "<group>"; };
+		8BA48E04308B9FD5E9859610 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CormorantGaramond-Light.ttf"; sourceTree = "<group>"; };
+		9A6DBA8B8AE94A58944FC86A /* SmartBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartBreakdownView.swift; sourceTree = "<group>"; };
+		A79F15D59BB159B0C405C120 /* InkRippleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkRippleView.swift; sourceTree = "<group>"; };
+		B104BF5058DE58B47DD5DFD6 /* ShipporiMincho-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho-Regular.ttf"; sourceTree = "<group>"; };
+		B19CCE20A7CFFC45813D6530 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		B3B426C93E91B9720F33D004 /* WeeklyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChartView.swift; sourceTree = "<group>"; };
+		B56D926EB33E9FFE56E380F6 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C8F81A7E6731A3C0B9B86989 /* EnsoCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnsoCanvasView.swift; sourceTree = "<group>"; };
+		D32A8F6C5C541565F1E1F864 /* ShipporiMincho-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho-Bold.ttf"; sourceTree = "<group>"; };
+		D590138492F2756096A1C318 /* Enso.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Enso.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8F1A671F8ABF4EC47F23948 /* EnsoTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnsoTheme.swift; sourceTree = "<group>"; };
+		DC2D420E5576DDF339EBD51F /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		F178235F78325B77C50C8284 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		FC4121EC8FDA5BF95366E1C7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B9748D02A0712E7A035638A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1B450582BBAB1D11ADCCEB1 /* HealthKit.framework in Frameworks */,
+				D15FD61D780777942A9E3514 /* CoreLocation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		071C6E04EFDF801037BEB98E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC4121EC8FDA5BF95366E1C7 /* RootView.swift */,
+				1C36FFA099BF2D56007F5033 /* MainScreen */,
+				F728DA552CE09C29D0DFFBF1 /* SettingsScreen */,
+				ADE083671AFCAC2E5072DA9F /* StatsScreen */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0959BE77392E7413B155E6FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0F7B625A8FB753A8C4A571CA /* HealthData.swift */,
+				0EBAEC99EBAE1DD051926A6B /* HydrationStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1C36FFA099BF2D56007F5033 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				C8F81A7E6731A3C0B9B86989 /* EnsoCanvasView.swift */,
+				A79F15D59BB159B0C405C120 /* InkRippleView.swift */,
+				B56D926EB33E9FFE56E380F6 /* MainView.swift */,
+				75EC0C95FA71A0096600126D /* SealView.swift */,
+			);
+			path = MainScreen;
+			sourceTree = "<group>";
+		};
+		284AB89DE74D9243A0B1CDC4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0555B93909D603539D99BA81 /* CoreLocation.framework */,
+				4B8164ADD2ADE0EFECC2DA8A /* HealthKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		76A6BB3019C3C323FB6AD825 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				D8F1A671F8ABF4EC47F23948 /* EnsoTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		7850E905D260340C2B628FBB /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8BA48E04308B9FD5E9859610 /* CormorantGaramond-Light.ttf */,
+				8699E8E3723D64AB007C905A /* CormorantGaramond-LightItalic.ttf */,
+				676E6140F2424D12BD2588A2 /* CormorantGaramond-Regular.ttf */,
+				D32A8F6C5C541565F1E1F864 /* ShipporiMincho-Bold.ttf */,
+				2128ADA257820847A2EC8383 /* ShipporiMincho-Medium.ttf */,
+				B104BF5058DE58B47DD5DFD6 /* ShipporiMincho-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		9372A7EDF3108D0C1E02D854 /* Enso */ = {
+			isa = PBXGroup;
+			children = (
+				5C88BDD7A976E68377305C6A /* Enso.entitlements */,
+				32EA255267C61CDE491A13B1 /* EnsoApp.swift */,
+				848095A48217CC24C7718CB6 /* Info.plist */,
+				0959BE77392E7413B155E6FE /* Models */,
+				9852E027F0155461F341D1F3 /* Resources */,
+				A82B602B6CB6E9D2DCCC4610 /* Services */,
+				76A6BB3019C3C323FB6AD825 /* Theme */,
+				071C6E04EFDF801037BEB98E /* Views */,
+			);
+			path = Enso;
+			sourceTree = "<group>";
+		};
+		9852E027F0155461F341D1F3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7850E905D260340C2B628FBB /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		98FEB1F045BBB9368E3BD7C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D590138492F2756096A1C318 /* Enso.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A82B602B6CB6E9D2DCCC4610 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B19CCE20A7CFFC45813D6530 /* HealthKitManager.swift */,
+				DC2D420E5576DDF339EBD51F /* NotificationManager.swift */,
+				6C7FD9A35A9F1F4BB70C4BB4 /* SmartGoalEngine.swift */,
+				0769FF7A87FED6F338A0EB53 /* WeatherManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		ADE083671AFCAC2E5072DA9F /* StatsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				6412A664756C1B3ED6B32B1D /* ConditionsGridView.swift */,
+				9A6DBA8B8AE94A58944FC86A /* SmartBreakdownView.swift */,
+				F178235F78325B77C50C8284 /* StatsView.swift */,
+				B3B426C93E91B9720F33D004 /* WeeklyChartView.swift */,
+			);
+			path = StatsScreen;
+			sourceTree = "<group>";
+		};
+		B604BB5E7EE095BEF803AA02 = {
+			isa = PBXGroup;
+			children = (
+				9372A7EDF3108D0C1E02D854 /* Enso */,
+				284AB89DE74D9243A0B1CDC4 /* Frameworks */,
+				98FEB1F045BBB9368E3BD7C9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F728DA552CE09C29D0DFFBF1 /* SettingsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				6D88DE0F4ABD36CC711DD347 /* SettingsView.swift */,
+			);
+			path = SettingsScreen;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7239E9CA80BACF33BDC89639 /* Enso */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDC4F26287BEB9F3937826CC /* Build configuration list for PBXNativeTarget "Enso" */;
+			buildPhases = (
+				96A6236F0A1C8124A81A1856 /* Sources */,
+				789F742F1BBBB53829D2C338 /* Resources */,
+				B9748D02A0712E7A035638A1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Enso;
+			packageProductDependencies = (
+			);
+			productName = Enso;
+			productReference = D590138492F2756096A1C318 /* Enso.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		69627C62AE9E4F54C2BF22EE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					7239E9CA80BACF33BDC89639 = {
+						DevelopmentTeam = CLKKRA3T5R;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 586B6A683F163A0AC3D97CE7 /* Build configuration list for PBXProject "Enso" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = B604BB5E7EE095BEF803AA02;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7239E9CA80BACF33BDC89639 /* Enso */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		789F742F1BBBB53829D2C338 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CFFA1D7038B4080E0B05E94 /* CormorantGaramond-Light.ttf in Resources */,
+				25656E232CFC34A12F9D6726 /* CormorantGaramond-LightItalic.ttf in Resources */,
+				0BD068056049514798B223FC /* CormorantGaramond-Regular.ttf in Resources */,
+				895E2A17FB40276DA77F9711 /* ShipporiMincho-Bold.ttf in Resources */,
+				A0B6919A653245A0C14F3013 /* ShipporiMincho-Medium.ttf in Resources */,
+				8C928DD3621BFB4120596BF7 /* ShipporiMincho-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		96A6236F0A1C8124A81A1856 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A97B30DB74AC8D01EB39A89E /* ConditionsGridView.swift in Sources */,
+				8605ADFC3BBBB2B081D4813F /* EnsoApp.swift in Sources */,
+				D3AEEA62D0A4F8AC9422022F /* EnsoCanvasView.swift in Sources */,
+				C76DAD28885C1C404A1D2E7B /* EnsoTheme.swift in Sources */,
+				403EA8C54A51DEE43EA2378B /* HealthData.swift in Sources */,
+				755E6EF8ED2F6C472D3502DC /* HealthKitManager.swift in Sources */,
+				9E0220DA248C90F1357A8DD6 /* HydrationStore.swift in Sources */,
+				B9FD09A0E105385CF25F3469 /* InkRippleView.swift in Sources */,
+				54ABDEACFB5D7F7679C8BC6E /* MainView.swift in Sources */,
+				9908B358D5CCBA8D11523B3C /* NotificationManager.swift in Sources */,
+				2C267FCF3FFA00BC8CD4AA18 /* RootView.swift in Sources */,
+				207753A71D7C2973F99E4CA3 /* SealView.swift in Sources */,
+				B7A7CC20AB68CF189987BBE5 /* SettingsView.swift in Sources */,
+				17FF28A76CE042649943F9A4 /* SmartBreakdownView.swift in Sources */,
+				BAED90030D06717261E7A34D /* SmartGoalEngine.swift in Sources */,
+				195ABF16A8C2FD3AA43ACD51 /* StatsView.swift in Sources */,
+				434D9BE4A46B7A71D841B795 /* WeatherManager.swift in Sources */,
+				039334230488EEABF49EF74E /* WeeklyChartView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3920E5B6300C2AFA848977D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CLKKRA3T5R;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		4A015235540B2B7F0C649056 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Enso/Enso.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Enso/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.enso;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		87F56603C6CB5A411B52F268 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CLKKRA3T5R;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		E0D70C281E783E389CDE7B15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Enso/Enso.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Enso/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.personal.enso;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		586B6A683F163A0AC3D97CE7 /* Build configuration list for PBXProject "Enso" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3920E5B6300C2AFA848977D2 /* Debug */,
+				87F56603C6CB5A411B52F268 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CDC4F26287BEB9F3937826CC /* Build configuration list for PBXNativeTarget "Enso" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0D70C281E783E389CDE7B15 /* Debug */,
+				4A015235540B2B7F0C649056 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 69627C62AE9E4F54C2BF22EE /* Project object */;
+}

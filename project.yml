@@ -1,0 +1,27 @@
+name: Enso
+options:
+  bundleIdPrefix: com.personal
+  deploymentTarget:
+    iOS: "17.0"
+settings:
+  base:
+    DEVELOPMENT_TEAM: "CLKKRA3T5R"
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "5.9"
+targets:
+  Enso:
+    type: application
+    platform: iOS
+    sources:
+      - path: Enso
+    settings:
+      base:
+        INFOPLIST_FILE: Enso/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.personal.enso
+    entitlements:
+      path: Enso/Enso.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+    dependencies:
+      - sdk: HealthKit.framework
+      - sdk: CoreLocation.framework

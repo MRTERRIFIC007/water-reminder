@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Ensō — Water Reminder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Old+Mincho:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ENSŌ — Design Mockup for SwiftUI iPhone App
+   A zen water reminder. Ink on paper.
+   ═══════════════════════════════════════════ */
+
+:root {
+  /* Washi Paper — warm, alive, not sterile white */
+  --paper:       #F2EDE3;
+  --paper-grain: #EDE7DB;
+  --paper-shadow:#E4DDD0;
+
+  /* Sumi Ink — not flat black, a living charcoal */
+  --ink:         #2A2826;
+  --ink-warm:    #3D3835;
+  --ink-mid:     #7A756E;
+  --ink-light:   #A8A29A;
+  --ink-faded:   #C8C2B8;
+  --ink-ghost:   #DBD6CC;
+  --ink-whisper: #E8E3D9;
+
+  /* Accent — like a red seal stamp (hanko) */
+  --vermillion:  #C4453C;
+  --vermillion-soft: rgba(196, 69, 60, 0.12);
+
+  --radius-soft: 16px;
+  --ease-brush:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-ink:    cubic-bezier(0.33, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --paper:       #161514;
+  --paper-grain: #1C1B19;
+  --paper-shadow:#0F0E0D;
+  --ink:         #E4DFD6;
+  --ink-warm:    #D4CFC5;
+  --ink-mid:     #8A857D;
+  --ink-light:   #5A5650;
+  --ink-faded:   #3D3A36;
+  --ink-ghost:   #2A2825;
+  --ink-whisper: #222120;
+  --vermillion:  #D4615A;
+  --vermillion-soft: rgba(212, 97, 90, 0.1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #CDC6B8;
+  font-family: 'Cormorant Garamond', 'Shippori Mincho', Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[data-theme="dark"] body { background: #0A0A09; }
+
+/* ── Device Frame (desktop preview) ── */
+.device {
+  position: relative;
+  width: 100%; height: 100vh;
+  max-width: 393px; max-height: 852px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+@media (min-width: 500px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .device {
+    border-radius: 50px;
+    box-shadow:
+      0 0 0 12px #1A1918,
+      0 0 0 13px #333,
+      0 30px 100px rgba(0,0,0,0.35),
+      0 10px 40px rgba(0,0,0,0.2);
+  }
+  /* Notch */
+  .device::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 126px; height: 34px;
+    background: #1A1918;
+    border-radius: 0 0 20px 20px;
+    z-index: 9999;
+  }
+}
+
+/* ── Paper Texture ── */
+.paper-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8000;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.008) 2px,
+      rgba(0,0,0,0.008) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.005) 3px,
+      rgba(0,0,0,0.005) 6px
+    );
+}
+
+[data-theme="dark"] .paper-texture {
+  mix-blend-mode: screen;
+  opacity: 0.08;
+}
+
+/* Subtle vignette */
+.device::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 7999;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    transparent 50%,
+    rgba(0,0,0,0.04) 100%
+  );
+}
+
+/* ═══════════════════
+   SCREEN: MAIN (Ensō)
+   ═══════════════════ */
+.screen {
+  position: absolute;
+  inset: 0;
+  will-change: transform, opacity;
+}
+
+.screen-main {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.7s var(--ease-brush), opacity 0.5s var(--ease-ink);
+}
+
+.screen-main.away {
+  transform: translateY(-40%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Ensō Canvas ── */
+.enso-wrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin-top: -30px;
+  cursor: pointer;
+}
+
+#enso {
+  width: 260px;
+  height: 260px;
+  display: block;
+}
+
+/* Ink ripple on tap */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--ink-ghost) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0.7;
+  animation: rippleFade 1s var(--ease-brush) forwards;
+}
+
+@keyframes rippleFade {
+  0%   { transform: scale(0); opacity: 0.7; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* ── Progress Text (appears after first tap) ── */
+.progress-label {
+  margin-top: 32px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-brush);
+}
+
+.progress-label.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.progress-ml {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.progress-goal {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-light);
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+}
+
+/* ── Completion Seal ── */
+.seal {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0) rotate(-15deg);
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--vermillion);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--vermillion);
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transition: transform 0.6s var(--ease-brush), opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.seal.stamp {
+  transform: translate(-50%, -50%) scale(1) rotate(-8deg);
+  opacity: 0.7;
+}
+
+/* ── Swipe Hint ── */
+.swipe-cue {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.25;
+  transition: opacity 0.6s ease;
+}
+
+.swipe-cue-line {
+  width: 28px;
+  height: 1px;
+  background: var(--ink-light);
+}
+
+.swipe-cue-text {
+  font-size: 9px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: var(--ink-light);
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.8; }
+}
+
+/* ── Theme Toggle ── */
+.theme-btn {
+  position: absolute;
+  top: 58px;
+  right: 24px;
+  width: 28px; height: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.theme-btn:active { opacity: 0.5; }
+
+.theme-btn svg {
+  width: 100%; height: 100%;
+  stroke: var(--ink);
+  fill: none;
+  stroke-width: 1;
+}
+
+/* ═══════════════════
+   SCREEN: STATS
+   ═══════════════════ */
+.screen-stats {
+  z-index: 5;
+  background: var(--paper);
+  transform: translateY(100%);
+  transition: transform 0.7s var(--ease-brush);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 28px 60px;
+}
+.screen-stats::-webkit-scrollbar { display: none; }
+
+.screen-stats.open { transform: translateY(0); }
+
+/* Stats Header */
+.stats-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--paper);
+  padding: 56px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stats-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.15em;
+  color: var(--ink-light);
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+.stats-back-btn:active { color: var(--ink); }
+.stats-back-btn svg {
+  width: 14px; height: 14px;
+  stroke: var(--ink-light);
+  fill: none;
+  stroke-width: 1.2;
+}
+
+.stats-gear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.25;
+  transition: opacity 0.2s;
+  padding: 8px;
+}
+.stats-gear-btn:active { opacity: 0.5; }
+.stats-gear-btn svg {
+  width: 18px; height: 18px;
+  stroke: var(--ink);
+  fill: none;
+  stroke-width: 1;
+}
+
+/* Stats: Divider */
+.ink-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--ink-whisper);
+  margin: 8px 0 36px;
+}
+
+/* Stats: Today block */
+.stat-block { margin-bottom: 44px; }
+
+.stat-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 10px;
+}
+
+.stat-hero {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 56px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.stat-hero-unit {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--ink-mid);
+  margin-left: 2px;
+  vertical-align: baseline;
+}
+
+.stat-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-light);
+  margin-top: 6px;
+}
+
+/* Stats: Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--ink-whisper);
+  border-radius: 2px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: width 0.8s var(--ease-brush);
+}
+
+/* Stats: Weekly Chart */
+.week-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100px;
+  padding: 12px 0;
+}
+
+.week-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.week-bar {
+  width: 100%;
+  max-width: 20px;
+  border-radius: 2px 2px 0 0;
+  background: var(--ink);
+  opacity: 0.1;
+  min-height: 1px;
+  transition: height 0.6s var(--ease-brush), opacity 0.5s ease;
+}
+.week-bar.has-data { opacity: 0.2; }
+.week-bar.is-today { opacity: 0.75; }
+
+.week-day {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+}
+
+/* Stats: Conditions */
+.conditions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--ink-whisper);
+  border: 1px solid var(--ink-whisper);
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+}
+
+.cond-cell {
+  background: var(--paper);
+  padding: 18px 10px;
+  text-align: center;
+}
+
+.cond-val {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.cond-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 6px;
+}
+
+/* Stats: Smart note */
+.smart-note {
+  background: var(--vermillion-soft);
+  border-left: 2px solid var(--vermillion);
+  padding: 14px 16px;
+  border-radius: 0 var(--radius-soft) var(--radius-soft) 0;
+}
+
+.smart-note p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-warm);
+  line-height: 1.5;
+}
+
+/* ═══════════════════
+   SCREEN: SETTINGS
+   ═══════════════════ */
+.screen-settings {
+  z-index: 30;
+  background: var(--paper);
+  transform: translateX(100%);
+  transition: transform 0.55s var(--ease-brush);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 0 28px 60px;
+}
+.screen-settings::-webkit-scrollbar { display: none; }
+
+.screen-settings.open { transform: translateX(0); }
+
+.settings-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--paper);
+  padding: 56px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.settings-x {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+.settings-x:active { opacity: 0.6; }
+.settings-x svg {
+  width: 16px; height: 16px;
+  stroke: var(--ink);
+  fill: none;
+  stroke-width: 1.2;
+}
+
+.set-group { margin-bottom: 32px; }
+
+.set-group-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 8px;
+}
+
+.set-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ink-whisper);
+}
+
+.set-name {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stepper-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-ghost);
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.stepper-btn:active {
+  background: var(--ink-whisper);
+  color: var(--ink);
+  border-color: var(--ink-light);
+}
+
+.stepper-val {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16px;
+  color: var(--ink);
+  min-width: 56px;
+  text-align: center;
+}
+
+/* Conditions 2x3 grid */
+.conditions-2x3 {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+}
+
+/* Sync indicator */
+.sync-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6BA368;
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: pulse 3s ease-in-out infinite;
+}
+[data-theme="dark"] .sync-dot { background: #7CB87A; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.sync-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-faded);
+  margin-top: 10px;
+  letter-spacing: 0.05em;
+}
+
+/* Smart breakdown */
+.smart-breakdown {
+  margin-top: 12px;
+  padding: 0 2px;
+  width: 100%;
+}
+
+.sb-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--ink-whisper);
+  gap: 12px;
+}
+
+.sb-row:last-child { border-bottom: none; }
+
+.sb-reason {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-mid);
+  flex: 1;
+}
+
+.sb-adj {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 13px;
+  color: var(--ink-mid);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.sb-total .sb-reason,
+.sb-total .sb-adj {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.sb-total {
+  padding-top: 10px;
+  margin-top: 3px;
+  border-top: 1px solid var(--ink-faded);
+  border-bottom: none;
+}
+
+/* Data source status */
+.source-status {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+}
+
+.source-status.connected {
+  color: #6BA368;
+}
+[data-theme="dark"] .source-status.connected { color: #7CB87A; }
+
+.source-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-faded);
+  line-height: 1.5;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ink-whisper);
+}
+
+/* Toggle */
+.toggle {
+  position: relative;
+  width: 42px; height: 24px;
+  cursor: pointer;
+}
+.toggle input { display: none; }
+.toggle-rail {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: var(--ink-ghost);
+  transition: background 0.3s var(--ease-brush);
+}
+.toggle-rail::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  top: 3px; left: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.3s var(--ease-brush);
+}
+.toggle input:checked + .toggle-rail {
+  background: var(--ink);
+}
+.toggle input:checked + .toggle-rail::after {
+  transform: translateX(18px);
+}
+
+/* Reset button */
+.reset-btn {
+  width: 100%;
+  margin-top: 40px;
+  padding: 16px;
+  background: none;
+  border: 1px solid var(--ink-ghost);
+  border-radius: var(--radius-soft);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: var(--ink-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.reset-btn:active {
+  background: var(--ink-whisper);
+  border-color: var(--ink-light);
+  color: var(--ink);
+}
+
+/* ═══════════════════
+   TOAST
+   ═══════════════════ */
+.toast {
+  position: absolute;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  z-index: 9000;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.1em;
+  color: var(--ink-mid);
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s var(--ease-brush);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════
+   INK WASH (completion)
+   ═══════════════════ */
+.ink-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(42,40,38,0.06) 0%,
+    transparent 60%
+  );
+}
+
+[data-theme="dark"] .ink-wash {
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(228,223,214,0.04) 0%,
+    transparent 60%
+  );
+}
+
+.ink-wash.flash {
+  animation: washPulse 2.2s var(--ease-ink) forwards;
+}
+
+@keyframes washPulse {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Design Annotation Badge ── */
+.design-badge {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: #999;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@media (max-width: 500px) {
+  .design-badge { display: none; }
+}
+</style>
+</head>
+
+<body>
+<div class="device" id="device">
+  <div class="paper-texture"></div>
+  <div class="ink-wash" id="inkWash"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="screen screen-main" id="scrMain">
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+      <svg viewBox="0 0 24 24" id="themeIcon">
+        <circle cx="12" cy="12" r="4.5"/>
+        <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="4.93" y1="4.93" x2="6.76" y2="6.76"/>
+        <line x1="17.24" y1="17.24" x2="19.07" y2="19.07"/>
+        <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+        <line x1="4.93" y1="19.07" x2="6.76" y2="17.24"/>
+        <line x1="17.24" y1="6.76" x2="19.07" y2="4.93"/>
+      </svg>
+    </button>
+
+    <div class="enso-wrap" id="ensoWrap">
+      <canvas id="enso" width="520" height="520"></canvas>
+      <div class="seal" id="seal">FULL</div>
+    </div>
+
+    <div class="progress-label" id="progLabel">
+      <div class="progress-ml" id="progMl">0</div>
+      <div class="progress-goal" id="progGoal">of 2,000 ml</div>
+    </div>
+
+    <div class="swipe-cue">
+      <div class="swipe-cue-line"></div>
+      <div class="swipe-cue-text">details</div>
+    </div>
+  </div>
+
+  <!-- ═══ STATS ═══ -->
+  <div class="screen screen-stats" id="scrStats">
+    <div class="stats-head">
+      <button class="stats-back-btn" id="statsBackBtn">
+        <svg viewBox="0 0 24 24"><polyline points="17 14 12 9 7 14"/></svg>
+        return
+      </button>
+      <button class="stats-gear-btn" id="gearBtn">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="2.5"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <!-- Today -->
+    <div class="stat-block">
+      <div class="stat-eyebrow">today</div>
+      <div class="stat-hero" id="sToday">0<span class="stat-hero-unit">ml</span></div>
+      <div class="stat-sub" id="sTodaySub">of 2,000 ml</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="sBar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Weekly -->
+    <div class="stat-block">
+      <div class="stat-eyebrow">this week</div>
+      <div class="week-chart" id="weekChart"></div>
+    </div>
+
+    <!-- Apple Watch / HealthKit Data -->
+    <div class="stat-block">
+      <div class="stat-eyebrow">
+        from apple watch
+        <span class="sync-dot" id="syncDot"></span>
+      </div>
+      <div class="conditions conditions-2x3">
+        <div class="cond-cell">
+          <div class="cond-val" id="hkSleep">7.5h</div>
+          <div class="cond-label">sleep</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="hkWake">6:42</div>
+          <div class="cond-label">woke up</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="hkSteps">5.2k</div>
+          <div class="cond-label">steps</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="hkCal">340</div>
+          <div class="cond-label">active cal</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="hkHr">72</div>
+          <div class="cond-label">avg hr</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="hkWorkout">—</div>
+          <div class="cond-label">workout</div>
+        </div>
+      </div>
+      <div class="sync-time" id="syncTime">synced 3 min ago</div>
+    </div>
+
+    <!-- Weather (from device location) -->
+    <div class="stat-block">
+      <div class="stat-eyebrow">weather</div>
+      <div class="conditions">
+        <div class="cond-cell">
+          <div class="cond-val" id="wxTemp">26°</div>
+          <div class="cond-label">now</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="wxHigh">31°</div>
+          <div class="cond-label">high</div>
+        </div>
+        <div class="cond-cell">
+          <div class="cond-val" id="wxHumid">68%</div>
+          <div class="cond-label">humidity</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Smart adjustment -->
+    <div class="stat-block">
+      <div class="stat-eyebrow">smart adjustment</div>
+      <div class="smart-note" id="smartNote">
+        <p id="smartText">+250 ml — warm day, 5.2k steps, slept 7.5h</p>
+      </div>
+      <div class="smart-breakdown" id="smartBreakdown">
+        <div class="sb-row"><span class="sb-reason">Warm weather (26°)</span><span class="sb-adj">+100 ml</span></div>
+        <div class="sb-row"><span class="sb-reason">Above avg. activity</span><span class="sb-adj">+150 ml</span></div>
+        <div class="sb-row"><span class="sb-reason">Good sleep (7.5h)</span><span class="sb-adj">+0 ml</span></div>
+        <div class="sb-row sb-total"><span class="sb-reason">Adjusted goal</span><span class="sb-adj">2,250 ml</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS ═══ -->
+  <div class="screen screen-settings" id="scrSet">
+    <div class="settings-head">
+      <div class="settings-title">Settings</div>
+      <button class="settings-x" id="setXBtn">
+        <svg viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ink-divider"></div>
+
+    <div class="set-group">
+      <div class="set-group-label">hydration</div>
+      <div class="set-row">
+        <span class="set-name">Glass size</span>
+        <div class="stepper">
+          <button class="stepper-btn" data-s="glass" data-d="-1">−</button>
+          <span class="stepper-val" id="vGlass">250 ml</span>
+          <button class="stepper-btn" data-s="glass" data-d="1">+</button>
+        </div>
+      </div>
+      <div class="set-row">
+        <span class="set-name">Daily goal</span>
+        <div class="stepper">
+          <button class="stepper-btn" data-s="goal" data-d="-1">−</button>
+          <span class="stepper-val" id="vGoal">2,000 ml</span>
+          <button class="stepper-btn" data-s="goal" data-d="1">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-group-label">data sources</div>
+      <div class="set-row">
+        <span class="set-name">Apple Watch</span>
+        <span class="source-status connected">connected</span>
+      </div>
+      <div class="set-row">
+        <span class="set-name">HealthKit</span>
+        <span class="source-status connected">authorized</span>
+      </div>
+      <div class="set-row">
+        <span class="set-name">Weather</span>
+        <span class="source-status connected">location active</span>
+      </div>
+      <div class="source-note">Sleep, activity, heart rate, and workouts sync automatically from your Apple Watch</div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-group-label">smart reminders</div>
+      <div class="set-row">
+        <span class="set-name">Adapt to activity</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <span class="toggle-rail"></span>
+        </label>
+      </div>
+      <div class="set-row">
+        <span class="set-name">Adapt to weather</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <span class="toggle-rail"></span>
+        </label>
+      </div>
+      <div class="set-row">
+        <span class="set-name">Quiet during sleep</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <span class="toggle-rail"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <div class="set-group-label">notifications</div>
+      <div class="set-row">
+        <span class="set-name">Reminders</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <span class="toggle-rail"></span>
+        </label>
+      </div>
+      <div class="set-row">
+        <span class="set-name">Haptics</span>
+        <label class="toggle">
+          <input type="checkbox" checked>
+          <span class="toggle-rail"></span>
+        </label>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn">reset today</button>
+  </div>
+</div>
+
+<div class="design-badge">ENSŌ — SwiftUI Design Reference</div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ══════════════════════════
+     STATE
+     ══════════════════════════ */
+  const S = {
+    glasses: 0,
+    glassSize: 250,
+    goal: 2000,
+    dark: false,
+    week: [7, 5, 8, 6, 8, 4, 0],
+  };
+
+  // Simulated HealthKit data (in real app: fetched from HealthKit + WeatherKit)
+  const healthData = {
+    sleepHours: 7.5,
+    wakeTime: '6:42',
+    bedTime: '23:14',
+    steps: 5230,
+    activeCal: 340,
+    avgHr: 72,
+    workout: null, // null = no workout yet, or e.g. { type: 'Run', duration: 32 }
+    temp: 26,
+    tempHigh: 31,
+    humidity: 68,
+    lastSync: Date.now() - 3 * 60 * 1000, // 3 min ago
+  };
+
+  // Simulate dynamic data changes over time
+  function simulateHealthUpdate() {
+    healthData.steps += Math.floor(Math.random() * 200);
+    healthData.activeCal += Math.floor(Math.random() * 15);
+    healthData.avgHr = 68 + Math.floor(Math.random() * 12);
+    healthData.lastSync = Date.now();
+    if (healthData.steps > 6000 && !healthData.workout) {
+      healthData.workout = { type: 'Walk', duration: Math.floor((healthData.steps - 5000) / 100) };
+    }
+    updateHealthUI();
+  }
+  setInterval(simulateHealthUpdate, 30000); // simulate every 30s
+
+  const LS_KEY = 'enso';
+  const LS_DATE = 'enso-d';
+
+  function load() {
+    try {
+      const d = JSON.parse(localStorage.getItem(LS_KEY));
+      if (d) Object.assign(S, d);
+      const last = localStorage.getItem(LS_DATE);
+      const today = new Date().toDateString();
+      if (last && last !== today) {
+        S.week.push(0);
+        if (S.week.length > 7) S.week = S.week.slice(-7);
+        S.glasses = 0;
+      }
+      localStorage.setItem(LS_DATE, today);
+    } catch(e) {}
+  }
+  load();
+
+  function save() {
+    localStorage.setItem(LS_KEY, JSON.stringify(S));
+  }
+
+  function progress() {
+    return Math.min(S.glasses / Math.max(Math.ceil(S.goal / S.glassSize), 1), 1);
+  }
+
+  /* ══════════════════════════
+     ENSŌ — Sumi-e Brush Stroke
+     ══════════════════════════ */
+  const canvas = document.getElementById('enso');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const CX = W / 2, CY = H / 2, R = W * 0.37;
+
+  // Precompute brush path (bezier-based ensō)
+  // The ensō starts thick (pressed brush), thins in the middle (lifted),
+  // and trails off at the end (dry brush / flying white)
+  function buildPath(pct) {
+    const pts = [];
+    // How much arc to draw: starts at ~18% visible, goes to ~95% at completion
+    const arc = pct < 1
+      ? (0.12 + pct * 0.83) * Math.PI * 2
+      : Math.PI * 2 * 0.94;
+    const N = 300;
+    const startA = -Math.PI * 0.55; // start upper-left
+
+    // Seed a deterministic wobble
+    const seed = 42;
+    function noise(i) {
+      const x = Math.sin(i * 127.1 + seed) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const angle = startA + t * arc;
+
+      // Organic wobble — irregular, not sinusoidal
+      const w1 = Math.sin(t * 53.7) * 1.8;
+      const w2 = Math.cos(t * 37.3) * 1.1;
+      const w3 = (noise(i) - 0.5) * 1.4;
+      const wobble = w1 + w2 + w3;
+
+      // Brush pressure: thick at start, thin in middle, thick near end, trail off
+      let pressure;
+      if (t < 0.06)      pressure = t / 0.06;                    // attack
+      else if (t < 0.25) pressure = 1.0 - (t - 0.06) * 1.2;     // ease off
+      else if (t < 0.7)  pressure = 0.55 + Math.sin((t-0.25)*3.5)*0.15; // sustain
+      else if (t < 0.88) pressure = 0.55 + (t - 0.7) * 2.5;     // press down
+      else                pressure = Math.max(0, 1.0 - (t-0.88)*8.3); // lift / dry brush
+
+      const r = R + wobble;
+      pts.push({
+        x: CX + Math.cos(angle) * r,
+        y: CY + Math.sin(angle) * r,
+        p: pressure,
+        t: t,
+      });
+    }
+    return pts;
+  }
+
+  // Draw the brush stroke
+  let animProg = 0;
+  let targetProg = progress();
+
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
+  function inkColor(alpha) {
+    return isDark()
+      ? `rgba(228,223,214,${alpha})`
+      : `rgba(38,36,34,${alpha})`;
+  }
+
+  function drawEnso(p) {
+    ctx.clearRect(0, 0, W, H);
+    if (p < 0.005) return;
+
+    const pts = buildPath(p);
+    const baseW = 5 + p * 18;
+    const baseA = 0.06 + p * 0.88;
+
+    // Main stroke
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a = pts[i], b = pts[i+1];
+      const w = baseW * (0.4 + a.p * 0.6);
+
+      // Alpha variation: dry brush at end
+      let alpha = baseA * (0.8 + a.p * 0.2);
+      // Add subtle ink density variation
+      alpha *= (0.9 + Math.sin(a.t * 19) * 0.1);
+
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = inkColor(Math.min(alpha, 0.95));
+      ctx.lineWidth = w;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // Second pass: soft inner glow (ink pooling effect)
+    ctx.globalCompositeOperation = 'source-atop';
+    for (let i = 0; i < pts.length - 1; i += 3) {
+      const a = pts[i];
+      const w = baseW * a.p * 0.3;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, w, 0, Math.PI * 2);
+      ctx.fillStyle = inkColor(baseA * 0.15);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+
+    // Ink splatter — tiny dots along the stroke
+    if (p > 0.15) {
+      const splatN = Math.floor(p * 12);
+      for (let i = 0; i < splatN; i++) {
+        const idx = Math.floor(Math.random() * pts.length);
+        const pt = pts[idx];
+        const offset = (Math.random() - 0.5) * baseW * 2.5;
+        const angle = Math.atan2(pt.y - CY, pt.x - CX) + Math.PI/2;
+        const sx = pt.x + Math.cos(angle) * offset;
+        const sy = pt.y + Math.sin(angle) * offset;
+        const sr = Math.random() * 1.2 + 0.2;
+        ctx.beginPath();
+        ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+        ctx.fillStyle = inkColor(baseA * 0.25 * Math.random());
+        ctx.fill();
+      }
+    }
+
+    // Completion: subtle radial glow
+    if (p >= 1) {
+      const g = ctx.createRadialGradient(CX, CY, R * 0.3, CX, CY, R * 1.5);
+      g.addColorStop(0, inkColor(0.025));
+      g.addColorStop(1, inkColor(0));
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(CX, CY, R * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // Animation loop
+  function tick() {
+    const diff = targetProg - animProg;
+    if (Math.abs(diff) > 0.0005) {
+      animProg += diff * 0.07;
+      drawEnso(animProg);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  animProg = progress() > 0 ? progress() - 0.005 : 0;
+  targetProg = progress();
+  tick();
+
+  /* ══════════════════════════
+     TAP TO LOG
+     ══════════════════════════ */
+  const ensoWrap = document.getElementById('ensoWrap');
+  const progLabel = document.getElementById('progLabel');
+  const progMl = document.getElementById('progMl');
+  const progGoal = document.getElementById('progGoal');
+  const seal = document.getElementById('seal');
+  const inkWash = document.getElementById('inkWash');
+  const toastEl = document.getElementById('toast');
+
+  function fmt(n) { return n.toLocaleString(); }
+
+  function updateLabel() {
+    const ml = S.glasses * S.glassSize;
+    progMl.textContent = fmt(ml);
+    progGoal.textContent = `of ${fmt(S.goal)} ml`;
+    progLabel.classList.toggle('show', S.glasses > 0);
+  }
+  updateLabel();
+
+  function showToast(txt) {
+    toastEl.textContent = txt;
+    toastEl.classList.add('visible');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toastEl.classList.remove('visible'), 1400);
+  }
+
+  ensoWrap.addEventListener('click', (e) => {
+    const max = Math.ceil(S.goal / S.glassSize);
+    if (S.glasses >= max + 2) return;
+
+    S.glasses++;
+    S.week[S.week.length - 1] = S.glasses;
+    save();
+    targetProg = progress();
+    updateLabel();
+
+    // Ripple
+    const rect = ensoWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rip = document.createElement('div');
+    rip.className = 'ripple';
+    rip.style.cssText = `left:${x}px;top:${y}px;width:60px;height:60px;margin:-30px 0 0 -30px;`;
+    ensoWrap.appendChild(rip);
+    setTimeout(() => rip.remove(), 1000);
+
+    // Toast
+    showToast(`${fmt(S.glasses * S.glassSize)} ml`);
+
+    // Haptic
+    if (navigator.vibrate) navigator.vibrate(8);
+
+    // Completion
+    if (S.glasses === max) {
+      setTimeout(() => {
+        seal.classList.add('stamp');
+        inkWash.classList.add('flash');
+        setTimeout(() => {
+          inkWash.classList.remove('flash');
+        }, 2200);
+      }, 400);
+    }
+  });
+
+  /* ══════════════════════════
+     NAVIGATION
+     ══════════════════════════ */
+  const scrMain = document.getElementById('scrMain');
+  const scrStats = document.getElementById('scrStats');
+  const scrSet = document.getElementById('scrSet');
+
+  // Swipe up -> stats (touch)
+  let ty0 = 0;
+  scrMain.addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; });
+  scrMain.addEventListener('touchend', e => {
+    if (ty0 - e.changedTouches[0].clientY > 50) openStats();
+  });
+
+  // Swipe up -> stats (mouse drag for desktop)
+  let my0 = 0, mouseDown = false;
+  scrMain.addEventListener('mousedown', e => { my0 = e.clientY; mouseDown = true; });
+  scrMain.addEventListener('mousemove', e => {
+    if (mouseDown && my0 - e.clientY > 50) { mouseDown = false; openStats(); }
+  });
+  scrMain.addEventListener('mouseup', () => { mouseDown = false; });
+
+  // Also: click the "details" swipe cue as a fallback
+  document.querySelector('.swipe-cue').addEventListener('click', openStats);
+
+  function openStats() {
+    updateStats();
+    scrMain.classList.add('away');
+    scrStats.classList.add('open');
+  }
+
+  function closeStats() {
+    scrMain.classList.remove('away');
+    scrStats.classList.remove('open');
+  }
+
+  document.getElementById('statsBackBtn').addEventListener('click', closeStats);
+  document.getElementById('gearBtn').addEventListener('click', () => scrSet.classList.add('open'));
+  document.getElementById('setXBtn').addEventListener('click', () => scrSet.classList.remove('open'));
+
+  function updateStats() {
+    const ml = S.glasses * S.glassSize;
+    const pct = progress();
+    document.getElementById('sToday').innerHTML = `${fmt(ml)}<span class="stat-hero-unit">ml</span>`;
+    document.getElementById('sTodaySub').textContent = `of ${fmt(S.goal)} ml`;
+    document.getElementById('sBar').style.width = `${pct * 100}%`;
+
+    // Weekly
+    const ch = document.getElementById('weekChart');
+    const days = ['M','T','W','T','F','S','S'];
+    const maxV = Math.max(...S.week, 1);
+    ch.innerHTML = S.week.map((v, i) => {
+      const h = Math.max((v / maxV) * 70, 1);
+      const today = i === S.week.length - 1;
+      return `<div class="week-col">
+        <div class="week-bar ${v > 0 ? 'has-data' : ''} ${today ? 'is-today' : ''}" style="height:${h}px"></div>
+        <span class="week-day">${days[i]}</span>
+      </div>`;
+    }).join('');
+  }
+
+  /* ══════════════════════════
+     SETTINGS
+     ══════════════════════════ */
+  function syncSettings() {
+    document.getElementById('vGlass').textContent = `${S.glassSize} ml`;
+    document.getElementById('vGoal').textContent = `${fmt(S.goal)} ml`;
+  }
+  syncSettings();
+
+  // Update HealthKit data in UI
+  function updateHealthUI() {
+    const h = healthData;
+    document.getElementById('hkSleep').textContent = h.sleepHours + 'h';
+    document.getElementById('hkWake').textContent = h.wakeTime;
+    document.getElementById('hkSteps').textContent = h.steps >= 1000 ? (h.steps / 1000).toFixed(1) + 'k' : h.steps;
+    document.getElementById('hkCal').textContent = h.activeCal;
+    document.getElementById('hkHr').textContent = h.avgHr;
+    document.getElementById('hkWorkout').textContent = h.workout ? `${h.workout.type} ${h.workout.duration}m` : '—';
+    document.getElementById('wxTemp').textContent = h.temp + '°';
+    document.getElementById('wxHigh').textContent = h.tempHigh + '°';
+    document.getElementById('wxHumid').textContent = h.humidity + '%';
+
+    // Sync time
+    const ago = Math.floor((Date.now() - h.lastSync) / 60000);
+    document.getElementById('syncTime').textContent = ago < 1 ? 'synced just now' : `synced ${ago} min ago`;
+
+    // Recompute smart adjustment
+    updateSmartGoal();
+  }
+
+  function updateSmartGoal() {
+    const h = healthData;
+    let adj = 0;
+    const reasons = [];
+
+    // Weather adjustment
+    if (h.temp >= 25) {
+      const weatherAdj = Math.min(Math.floor((h.temp - 24) * 50), 300);
+      adj += weatherAdj;
+      reasons.push({ text: `Warm weather (${h.temp}°)`, val: `+${weatherAdj} ml` });
+    } else {
+      reasons.push({ text: `Mild weather (${h.temp}°)`, val: '+0 ml' });
+    }
+
+    // Activity adjustment
+    if (h.steps > 4000) {
+      const actAdj = Math.min(Math.floor((h.steps - 4000) / 1000) * 75, 375);
+      adj += actAdj;
+      const stepsLabel = h.steps >= 1000 ? (h.steps/1000).toFixed(1) + 'k' : h.steps;
+      reasons.push({ text: `Active day (${stepsLabel} steps)`, val: `+${actAdj} ml` });
+    } else {
+      reasons.push({ text: 'Low activity', val: '+0 ml' });
+    }
+
+    // Workout boost
+    if (h.workout) {
+      const wAdj = Math.min(h.workout.duration * 8, 250);
+      adj += wAdj;
+      reasons.push({ text: `${h.workout.type} (${h.workout.duration}m)`, val: `+${wAdj} ml` });
+    }
+
+    // Sleep adjustment
+    if (h.sleepHours < 6) {
+      adj += 100;
+      reasons.push({ text: `Short sleep (${h.sleepHours}h)`, val: '+100 ml' });
+    } else {
+      reasons.push({ text: `Good sleep (${h.sleepHours}h)`, val: '+0 ml' });
+    }
+
+    const adjusted = S.goal + adj;
+    document.getElementById('smartText').textContent = adj > 0
+      ? `+${adj} ml — adjusted based on today's conditions`
+      : 'No adjustment needed — standard conditions';
+
+    const bd = document.getElementById('smartBreakdown');
+    bd.innerHTML = reasons.map(r =>
+      `<div class="sb-row"><span class="sb-reason">${r.text}</span><span class="sb-adj">${r.val}</span></div>`
+    ).join('') +
+    `<div class="sb-row sb-total"><span class="sb-reason">Adjusted goal</span><span class="sb-adj">${fmt(adjusted)} ml</span></div>`;
+  }
+
+  updateHealthUI();
+
+  document.querySelectorAll('.stepper-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = btn.dataset.s;
+      const d = +btn.dataset.d;
+      if (s === 'glass') S.glassSize = Math.max(50, Math.min(1000, S.glassSize + d * 50));
+      if (s === 'goal')  S.goal = Math.max(500, Math.min(5000, S.goal + d * 250));
+      save(); syncSettings(); targetProg = progress(); updateLabel(); updateSmartGoal();
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    S.glasses = 0;
+    S.week[S.week.length - 1] = 0;
+    seal.classList.remove('stamp');
+    save(); targetProg = 0; updateLabel();
+    scrSet.classList.remove('open');
+    setTimeout(closeStats, 80);
+    showToast('reset');
+  });
+
+  /* ══════════════════════════
+     THEME
+     ══════════════════════════ */
+  const themeBtn = document.getElementById('themeBtn');
+  const themeIcon = document.getElementById('themeIcon');
+
+  function applyTheme(dark) {
+    S.dark = dark;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    themeIcon.innerHTML = dark
+      ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      : '<circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.76" y2="6.76"/><line x1="17.24" y1="17.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.76" y2="17.24"/><line x1="17.24" y1="6.76" x2="19.07" y2="4.93"/>';
+    drawEnso(animProg);
+    save();
+  }
+
+  themeBtn.addEventListener('click', () => applyTheme(!S.dark));
+  if (S.dark) applyTheme(true);
+
+})();
+</script>
+</body>
+</html>
